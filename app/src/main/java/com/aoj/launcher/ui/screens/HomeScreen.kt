@@ -1,52 +1,55 @@
 package com.aoj.launcher.ui.screens
-        Column {
-            Text(
-                text = "APP INVENTORY",
-                color = TacticalKhaki,
-                style = androidx.compose.material3.MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = "$appCount launchable apps detected",
-                color = TacticalMutedText,
-                style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
-            )
-        }
 
-        Button(
-            onClick = onRefresh,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = TacticalKhaki,
-                contentColor = androidx.compose.ui.graphics.Color.Black
-            )
-        ) {
-            Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-            Text(text = " REFRESH")
-        }
-    }
-}
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
+import com.aoj.launcher.model.AppInfo
+import com.aoj.launcher.ui.components.AppTile
+import com.aoj.launcher.ui.components.OperationalBackground
+import com.aoj.launcher.ui.components.SettingsPanel
+import com.aoj.launcher.ui.components.StatusHeader
+import com.aoj.launcher.ui.theme.TacticalKhaki
+import com.aoj.launcher.ui.theme.TacticalLine
+import com.aoj.launcher.ui.theme.TacticalMutedText
+import com.aoj.launcher.ui.theme.TacticalPanel
+import com.aoj.launcher.ui.theme.TacticalText
 
 @Composable
-private fun InfoPanel(
-    title: String,
-    body: String
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(BorderStroke(1.dp, TacticalLine), RoundedCornerShape(8.dp))
-            .background(TacticalPanel, RoundedCornerShape(8.dp))
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            text = title,
-            color = TacticalKhaki,
-            style = androidx.compose.material3.MaterialTheme.typography.titleMedium
-        )
-        Text(
-            text = body,
-            color = TacticalText,
-            style = androidx.compose.material3.MaterialTheme.typography.bodyMedium
-        )
-    }
+fun HomeScreen(
+    apps: List<AppInfo>,
+    adminMode: Boolean,
+    showWatermark: Boolean,
+    showBackgroundImage: Boolean,
+    showSettings: Boolean,
+    onRefresh: () -> Unit,
+    onLaunchApp: (AppInfo) -> Unit,
+    onToggleSettings: () -> Unit,
+    onSetAdminMode: (Boolean) -> Unit,
+    onSetWatermark: (Boolean) -> Unit,
 }
