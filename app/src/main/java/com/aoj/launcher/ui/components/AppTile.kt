@@ -3,13 +3,8 @@ package com.aoj.launcher.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,17 +14,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.aoj.launcher.model.AppInfo
-import com.aoj.launcher.ui.theme.TacticalKhaki
-import com.aoj.launcher.ui.theme.TacticalLine
-import com.aoj.launcher.ui.theme.TacticalMutedText
-import com.aoj.launcher.ui.theme.TacticalPanelSoft
-import com.aoj.launcher.ui.theme.TacticalText
+import com.aoj.launcher.ui.theme.*
 
 @Composable
 fun AppTile(
     app: AppInfo,
     isPinned: Boolean,
-    adminMode: Boolean,
     onClick: () -> Unit,
     onTogglePinned: () -> Unit,
     onToggleHidden: () -> Unit,
@@ -41,13 +31,7 @@ fun AppTile(
             .background(TacticalPanelSoft, RoundedCornerShape(8.dp))
             .combinedClickable(
                 onClick = onClick,
-                onLongClick = {
-                    if (adminMode) {
-                        onTogglePinned()
-                    }
-                }
+                onLongClick = { onTogglePinned() },
+                onDoubleClick = { onToggleHidden() }
             )
-            .padding(horizontal = 8.dp, vertical = 10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
 }
