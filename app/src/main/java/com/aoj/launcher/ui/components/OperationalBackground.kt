@@ -1,21 +1,19 @@
 package com.aoj.launcher.ui.components
-@Composable
-fun OperationalBackground(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        TacticalBlack,
-                        TacticalOlive,
-                        TacticalBlack
-                    )
-                )
+                alpha = 0.14f,
+                modifier = Modifier.fillMaxSize()
             )
-    ) {
+        }
+
+        if (showWatermark) {
+            Image(
+                painter = painterResource(id = R.drawable.aoj_logo_watermark),
+                contentDescription = null,
+                alpha = 0.10f,
+                alignment = Alignment.TopEnd,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
@@ -43,7 +41,7 @@ fun OperationalBackground(
             )
 
             drawRect(
-                color = Color.Black.copy(alpha = 0.08f),
+                color = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.08f),
                 topLeft = Offset(w * 0.62f, h * 0.02f),
                 size = Size(w * 0.32f, h * 0.30f),
                 style = Stroke(width = 1f)
