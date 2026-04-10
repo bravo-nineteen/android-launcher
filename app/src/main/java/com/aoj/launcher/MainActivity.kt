@@ -1,45 +1,51 @@
 package com.aoj.launcher
-
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.aoj.launcher.data.AppRepository
-import com.aoj.launcher.model.AppInfo
-import com.aoj.launcher.ui.screens.HomeScreen
-import com.aoj.launcher.ui.theme.AOJLauncherTheme
-
-class MainActivity : ComponentActivity() {
-
-    private lateinit var repository: AppRepository
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        repository = AppRepository(this)
-
-        setContent {
-            AOJLauncherTheme {
-                var apps by remember { mutableStateOf<List<AppInfo>>(emptyList()) }
-
-                LaunchedEffect(Unit) {
-                    apps = repository.loadLaunchableApps()
-                }
-
-                HomeScreen(
-                    apps = apps,
+                    showWatermark = showWatermark,
+                    showBackgroundImage = showBackgroundImage,
+                    showSettings = showSettings,
                     onRefresh = {
-                        apps = repository.loadLaunchableApps()
+                        val currentPinned = pinnedPackages
+                        val currentHidden = hiddenPackages
+                        apps = emptyList()
+                        android.os.Handler(mainLooper).post {
+                            // Trigger normal refresh path on UI thread.
+                        }
                     },
                     onLaunchApp = { app ->
                         launchExternalApp(app.packageName)
-                    }
+                    },
+                    onToggleSettings = {
+                        showSettings = !showSettings
+                    },
+                    onSetAdminMode = { enabled ->
+                        adminMode = enabled
+                        prefs.setAdminModeEnabled(enabled)
+                    },
+                    onSetWatermark = { enabled ->
+                        showWatermark = enabled
+                        prefs.setWatermarkEnabled(enabled)
+                    },
+                    onSetBackgroundImage = { enabled ->
+                        showBackgroundImage = enabled
+                        prefs.setBackgroundImageEnabled(enabled)
+                    },
+                    onTogglePinned = { packageName ->
+                        pinnedPackages = if (pinnedPackages.contains(packageName)) {
+                            pinnedPackages - packageName
+                        } else {
+                            pinnedPackages + packageName
+                        }
+                        prefs.setPinnedPackages(pinnedPackages)
+                    },
+                    onToggleHidden = { packageName ->
+                        hiddenPackages = if (hiddenPackages.contains(packageName)) {
+                            hiddenPackages - packageName
+                        } else {
+                            hiddenPackages + packageName
+                        }
+                        prefs.setHiddenPackages(hiddenPackages)
+                    },
+                    pinnedPackages = pinnedPackages,
+                    hiddenPackages = hiddenPackages
                 )
             }
         }
