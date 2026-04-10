@@ -11,7 +11,10 @@ class AppRepository(
     private val context: Context
 ) {
 
-    suspend fun loadLaunchableApps(): List<AppInfo> = withContext(Dispatchers.IO) {
+    suspend fun loadLaunchableApps(
+        hiddenPackages: Set<String> = emptySet(),
+        pinnedPackages: Set<String> = emptySet()
+    ): List<AppInfo> = withContext(Dispatchers.IO) {
         val packageManager = context.packageManager
 
         val intent = Intent(Intent.ACTION_MAIN).apply {
@@ -23,7 +26,7 @@ class AppRepository(
             PackageManager.MATCH_ALL
         )
 
-        resolveInfos
+        val apps = resolveInfos
             .mapNotNull { resolveInfo ->
                 val activityInfo = resolveInfo.activityInfo ?: return@mapNotNull null
                 val label = resolveInfo.loadLabel(packageManager)?.toString()?.trim().orEmpty()
@@ -34,7 +37,11 @@ class AppRepository(
                     null
                 }
 
-                if (label.isBlank() || packageName == context.packageName) {
+                if (
+                    label.isBlank() ||
+                    packageName == context.packageName ||
+                    hiddenPackages.contains(packageName)
+                ) {
                     null
                 } else {
                     AppInfo(
@@ -45,6 +52,15 @@ class AppRepository(
                 }
             }
             .distinctBy { it.packageName }
+
+        val pinned = apps
+            .filter { pinnedPackages.contains(it.packageName) }
             .sortedBy { it.label.lowercase() }
+
+        val normal = apps
+            .filterNot { pinnedPackages.contains(it.packageName) }
+            .sortedBy { it.label.lowercase() }
+
+        pinned + normal
     }
 }
