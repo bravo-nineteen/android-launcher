@@ -66,4 +66,6 @@ fun SettingsPanel(
 
 @Composable
 private fun SettingRow(
+    label: String,
+    checked: Boolean,
 }
