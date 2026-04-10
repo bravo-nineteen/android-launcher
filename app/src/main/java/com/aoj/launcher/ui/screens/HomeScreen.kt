@@ -52,4 +52,20 @@ fun HomeScreen(
     onToggleSettings: () -> Unit,
     onSetAdminMode: (Boolean) -> Unit,
     onSetWatermark: (Boolean) -> Unit,
+    onSetBackgroundImage: (Boolean) -> Unit,
+    onTogglePinned: (String) -> Unit,
+    onToggleHidden: (String) -> Unit,
+    pinnedPackages: Set<String>,
+    hiddenPackages: Set<String>
+) {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+    val isCompact = screenWidthDp < 700
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        OperationalBackground(
+            showBackgroundImage = showBackgroundImage,
+            showWatermark = showWatermark
+        )
+
 }
